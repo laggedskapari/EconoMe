@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:econme_mobile/models/expense.dart';
 import 'package:econme_mobile/widgets/expenses_list.dart';
+import 'package:econme_mobile/widgets/footer_utility_belt.dart';
+import 'package:econme_mobile/widgets/new_expense.dart';
 
 class Expenses extends StatefulWidget {
   const Expenses({super.key});
@@ -10,6 +12,14 @@ class Expenses extends StatefulWidget {
 }
 
 class _Expenses extends State<Expenses> {
+  bool showNewExpenseWidget = false;
+
+  void createNewExpense() {
+    setState(() {
+      showNewExpenseWidget = true;
+    });
+  }
+
   final List<Expense> _registeredExpenses = [
     Expense(
       type: AmountType.debit,
@@ -70,6 +80,15 @@ class _Expenses extends State<Expenses> {
               child: ExpensesList(
                 expenses: _registeredExpenses,
               ),
+            ),
+            NewExpense(
+              showNewExpenseWidget: showNewExpenseWidget,
+            ),
+            FooterUtilityBelt(
+              createNewExpense: createNewExpense,
+            ),
+            const SizedBox(
+              height: 30,
             ),
           ],
         ),

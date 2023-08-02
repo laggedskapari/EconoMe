@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:econme_mobile/widgets/logo.dart';
 import 'package:econme_mobile/widgets/expenses.dart';
+import 'package:econme_mobile/widgets/footer_utility_belt.dart';
 
 class EconoMe extends StatefulWidget {
   const EconoMe({super.key});

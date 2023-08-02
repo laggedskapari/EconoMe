@@ -15,7 +15,7 @@ class ExpenseCard extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.all(30),
+      padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
       child: Row(
         children: [
           Row(
