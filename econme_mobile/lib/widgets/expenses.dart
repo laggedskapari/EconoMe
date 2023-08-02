@@ -12,35 +12,35 @@ class Expenses extends StatefulWidget {
 class _Expenses extends State<Expenses> {
   final List<Expense> _registeredExpenses = [
     Expense(
-      type: Type.debit,
+      type: AmountType.debit,
       category: Category.education,
       title: 'Flutter Development Course',
       amount: 20.99,
       date: DateTime.now(),
     ),
     Expense(
-      type: Type.credit,
+      type: AmountType.credit,
       category: Category.work,
       title: 'Salary',
       amount: 1200,
       date: DateTime.now(),
     ),
     Expense(
-      type: Type.debit,
+      type: AmountType.debit,
       category: Category.personal,
       title: 'Maldives Trip',
       amount: 199.99,
       date: DateTime.now(),
     ),
     Expense(
-      type: Type.debit,
+      type: AmountType.debit,
       category: Category.entertainment,
       title: 'Oppenheimer',
       amount: 20.99,
       date: DateTime.now(),
     ),
     Expense(
-      type: Type.debit,
+      type: AmountType.debit,
       category: Category.food,
       title: 'Wasabi',
       amount: 5.99,
