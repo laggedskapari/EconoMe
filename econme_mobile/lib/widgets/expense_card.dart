@@ -30,6 +30,16 @@ class ExpenseCard extends StatelessWidget {
               Column(
                 children: [
                   Text(
+                    expense.formattedDate,
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontSize: 12,
+                      fontFamily: 'JetBrainsMono',
+                      color: Color.fromARGB(255, 178, 178, 178),
+                    ),
+                  ),
+                  Text(
                     expense.title,
                     style: const TextStyle(
                       fontFamily: 'JetBrainsMono',
@@ -38,29 +48,13 @@ class ExpenseCard extends StatelessWidget {
                       color: Color.fromARGB(255, 255, 255, 255),
                     ),
                   ),
-                  Row(
-                    children: [
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        expense.date.toString(),
-                        style: const TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontSize: 12,
-                          fontFamily: 'JetBrainsMono',
-                          color: Color.fromARGB(255, 178, 178, 178),
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ],
           ),
           const Spacer(),
           Text(
-            '${amountType[expense.type]} \$${expense.amount.toStringAsFixed(3)}',
+            '${amountType[expense.type]} \$${expense.amount.toStringAsFixed(2)}',
             style: TextStyle(
               color: amountColor,
               fontSize: 15,

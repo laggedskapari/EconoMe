@@ -63,9 +63,9 @@ class _Expenses extends State<Expenses> {
                   fontSize: 40,
                   color: Color.fromARGB(255, 226, 183, 20)),
             ),
-            const SizedBox(
-              height: 50,
-            ),
+            // const SizedBox(
+            //   height: 5,
+            // ),
             Expanded(
               child: ExpensesList(
                 expenses: _registeredExpenses,
