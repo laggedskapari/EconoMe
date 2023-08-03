@@ -1,7 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:econme_mobile/models/expense.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key, required this.showNewExpenseWidget, required this.closeNewExpenseWidget});
+  const NewExpense(
+      {super.key,
+      required this.showNewExpenseWidget,
+      required this.closeNewExpenseWidget});
 
   final bool showNewExpenseWidget;
   final void Function() closeNewExpenseWidget;
@@ -13,7 +18,40 @@ class NewExpense extends StatefulWidget {
 class _NewExpense extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+  DateTime date = DateTime.now();
+  Category? _selectedCategory;
+  AmountType? _selectedAmountType;
   bool showWidget = false;
+
+  void _presentDatePicker() {
+    final now = DateTime.now();
+    showCupertinoModalPopup(
+      context: context,
+      builder: (_) => Container(
+        height: 190,
+        color: const Color.fromARGB(255, 178, 178, 178),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 180,
+              child: CupertinoDatePicker(
+                initialDateTime: now,
+                maximumDate: now,
+                mode: CupertinoDatePickerMode.date,
+                onDateTimeChanged: (value) {
+                  setState(
+                    () {
+                      date = value;
+                    },
+                  );
+                },
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   void dispose() {
@@ -33,6 +71,12 @@ class _NewExpense extends State<NewExpense> {
         child: Column(
           children: [
             TextField(
+              style: const TextStyle(
+                fontFamily: 'JetBrainsMono',
+                fontWeight: FontWeight.w700,
+                fontSize: 15,
+                color: Color.fromARGB(255, 178, 178, 178),
+              ),
               controller: _titleController,
               decoration: const InputDecoration(
                 hintText: '//title',
@@ -40,6 +84,7 @@ class _NewExpense extends State<NewExpense> {
                 contentPadding: EdgeInsets.symmetric(vertical: 10),
                 hintStyle: TextStyle(
                   fontFamily: 'JetBrainsMono',
+                  fontSize: 15,
                   fontWeight: FontWeight.w700,
                   color: Color.fromARGB(255, 178, 178, 178),
                 ),
@@ -47,38 +92,114 @@ class _NewExpense extends State<NewExpense> {
             ),
             Row(
               children: [
-                const Expanded(
-                  child: Text(
-                    '//Category',
-                    style: TextStyle(
-                      fontFamily: 'JetBrainsMono',
-                      fontWeight: FontWeight.w700,
-                      color: Color.fromARGB(255, 178, 178, 178),
-                    ),
-                  ),
-                ),
-                const Expanded(
-                  child: Text(
-                    '//type',
-                    style: TextStyle(
-                      fontFamily: 'JetBrainsMono',
-                      fontWeight: FontWeight.w700,
-                      color: Color.fromARGB(255, 178, 178, 178),
+                Expanded(
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      iconSize: 0.0,
+                      style: const TextStyle(
+                        fontFamily: 'JetBrainsMono',
+                        fontWeight: FontWeight.w700,
+                        color: Color.fromARGB(255, 178, 178, 178),
+                        fontSize: 15,
+                      ),
+                      hint: const Text(
+                        '//category',
+                        style: TextStyle(
+                          fontFamily: 'JetBrainsMono',
+                          fontWeight: FontWeight.w700,
+                          color: Color.fromARGB(255, 178, 178, 178),
+                          fontSize: 15,
+                        ),
+                      ),
+                      isDense: false,
+                      dropdownColor: const Color.fromARGB(255, 50, 52, 55),
+                      borderRadius: BorderRadius.circular(5),
+                      value: _selectedCategory,
+                      onChanged: (value) {
+                        if (value == null) {
+                          return;
+                        }
+                        setState(() {
+                          _selectedCategory = value;
+                        });
+                      },
+                      items: Category.values
+                          .map(
+                            (category) => DropdownMenuItem(
+                              value: category,
+                              child: Text(
+                                category.name.toString().toLowerCase(),
+                              ),
+                            ),
+                          )
+                          .toList(),
                     ),
                   ),
                 ),
                 Expanded(
-                  child: TextField(
-                    controller: _amountController,
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    decoration: const InputDecoration.collapsed(
-                      hintText: '//amount',
-                      hintStyle: TextStyle(
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      iconSize: 0.0,
+                      style: const TextStyle(
                         fontFamily: 'JetBrainsMono',
                         fontWeight: FontWeight.w700,
                         color: Color.fromARGB(255, 178, 178, 178),
+                        fontSize: 15,
+                      ),
+                      hint: const Text(
+                        '//amount type',
+                        style: TextStyle(
+                          fontFamily: 'JetBrainsMono',
+                          fontWeight: FontWeight.w700,
+                          color: Color.fromARGB(255, 178, 178, 178),
+                          fontSize: 15,
+                        ),
+                      ),
+                      isDense: false,
+                      dropdownColor: const Color.fromARGB(255, 50, 52, 55),
+                      borderRadius: BorderRadius.circular(5),
+                      value: _selectedAmountType,
+                      onChanged: (value) {
+                        if (value == null) {
+                          return;
+                        }
+                        _selectedAmountType = value;
+                      },
+                      items: AmountType.values
+                          .map(
+                            (type) => DropdownMenuItem(
+                              value: type,
+                              child: Text(
+                                type.name.toString().toLowerCase(),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: TextField(
+                      style: const TextStyle(
+                        fontFamily: 'JetBrainsMono',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                        color: Color.fromARGB(255, 178, 178, 178),
+                      ),
+                      controller: _amountController,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      decoration: const InputDecoration.collapsed(
+                        hintText: '//amount',
+                        hintStyle: TextStyle(
+                          fontFamily: 'JetBrainsMono',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                          color: Color.fromARGB(255, 178, 178, 178),
+                        ),
                       ),
                     ),
                   ),
@@ -90,22 +211,45 @@ class _NewExpense extends State<NewExpense> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    const Expanded(
-                      child: SizedBox(
-                        width: 10,
+                    Expanded(
+                      child: Text(
+                        formatter.format(date),
+                        style: const TextStyle(
+                          fontFamily: 'JetBrainsMono',
+                          fontWeight: FontWeight.w700,
+                          color: Color.fromARGB(255, 178, 178, 178),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: IconButton(
+                        onPressed: _presentDatePicker,
+                        icon: const Icon(
+                          Icons.calendar_today,
+                          color: Color.fromARGB(255, 178, 178, 178),
+                          size: 15,
+                        ),
                       ),
                     ),
                     const Spacer(),
                     Expanded(
                       child: IconButton(
                         onPressed: widget.closeNewExpenseWidget,
-                        icon: const Icon(Icons.check),
+                        icon: const Icon(
+                          Icons.check,
+                          color: Color.fromARGB(255, 178, 178, 178),
+                          size: 15,
+                        ),
                       ),
                     ),
                     Expanded(
                       child: IconButton(
                         onPressed: widget.closeNewExpenseWidget,
-                        icon: const Icon(Icons.close),
+                        icon: const Icon(
+                          Icons.close,
+                          color: Color.fromARGB(255, 178, 178, 178),
+                          size: 15,
+                        ),
                       ),
                     ),
                   ],
