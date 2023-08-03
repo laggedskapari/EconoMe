@@ -20,10 +20,9 @@ class _Expenses extends State<Expenses> {
     });
   }
 
-  void _closeNewExpense(){
+  void _closeNewExpense() {
     setState(() {
       _showNewExpenseWidget = false;
-
     });
   }
 
@@ -35,15 +34,55 @@ class _Expenses extends State<Expenses> {
   }
 
   void _removeExpense(Expense expense) {
+    final expenseIndex = _registeredExpenses.indexOf(expense);
     setState(() {
       _registeredExpenses.remove(expense);
     });
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: const Color.fromARGB(255, 50, 52, 55),
+        action: SnackBarAction(label: 'Undo', onPressed: () {
+          setState(() {
+            _registeredExpenses.insert(expenseIndex, expense);
+          });
+        },),
+        content: const Text(
+          '//expense removed!',
+          style: TextStyle(
+            fontFamily: 'JetBrainsMono',
+            fontSize: 15,
+            fontWeight: FontWeight.w700,
+            color: Colors.red,
+          ),
+        ),
+      ),
+    );
   }
 
   final List<Expense> _registeredExpenses = [];
 
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = const Center(
+      child: Text(
+        '//no expenses found! ( are you even a human ?)',
+        style: TextStyle(
+          color: Color.fromARGB(255, 178, 178, 178),
+          fontWeight: FontWeight.w700,
+          fontSize: 16,
+          fontFamily: 'JetBrainsMono',
+        ),
+      ),
+    );
+
+    if (_registeredExpenses.isNotEmpty) {
+      mainContent = ExpensesList(
+        expenses: _registeredExpenses,
+        onRemoveExpense: _removeExpense,
+      );
+    }
+
     return Center(
       child: Container(
         margin: const EdgeInsets.fromLTRB(0, 70, 0, 0),
@@ -61,10 +100,7 @@ class _Expenses extends State<Expenses> {
             //   height: 5,
             // ),
             Expanded(
-              child: ExpensesList(
-                expenses: _registeredExpenses,
-                onRemoveExpense: _removeExpense,
-              ),
+              child: mainContent,
             ),
             NewExpense(
               onAddExpense: _addNewExpense,
