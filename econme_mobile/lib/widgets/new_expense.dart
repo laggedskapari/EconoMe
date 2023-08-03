@@ -6,8 +6,10 @@ class NewExpense extends StatefulWidget {
   const NewExpense(
       {super.key,
       required this.showNewExpenseWidget,
-      required this.closeNewExpenseWidget});
+      required this.closeNewExpenseWidget,
+      required this.onAddExpense});
 
+  final void Function(Expense expense) onAddExpense;
   final bool showNewExpenseWidget;
   final void Function() closeNewExpenseWidget;
 
@@ -18,10 +20,13 @@ class NewExpense extends StatefulWidget {
 class _NewExpense extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+
   DateTime date = DateTime.now();
   Category? _selectedCategory;
   AmountType? _selectedAmountType;
+
   bool showWidget = false;
+  bool showErrorWidget = false;
 
   void _presentDatePicker() {
     final now = DateTime.now();
@@ -53,6 +58,37 @@ class _NewExpense extends State<NewExpense> {
     );
   }
 
+  void _submitNewExpense() {
+    final enteredAmount = double.tryParse(_amountController.text);
+    final isAmountValid = enteredAmount == null || enteredAmount <= 0;
+
+    if (_titleController.text.trim().isEmpty || isAmountValid) {
+      setState(() {
+        showErrorWidget = true;
+        Future.delayed(const Duration(seconds: 2), () {
+          setState(() {
+            showErrorWidget = false;
+          });
+        });
+      });
+      return;
+    }
+
+    widget.onAddExpense(
+      Expense(
+        type: _selectedAmountType!,
+        category: _selectedCategory!,
+        title: _titleController.text,
+        amount: enteredAmount,
+        date: date,
+      ),
+    );
+    _amountController.text = '';
+    _titleController.text = '';
+    _selectedCategory = null;
+    _selectedAmountType = null;
+  }
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -67,7 +103,7 @@ class _NewExpense extends State<NewExpense> {
       visible: showWidget,
       child: Container(
         decoration: null,
-        padding: const EdgeInsets.all(30),
+        padding: const EdgeInsets.fromLTRB(50, 40, 40, 40),
         child: Column(
           children: [
             TextField(
@@ -163,7 +199,9 @@ class _NewExpense extends State<NewExpense> {
                         if (value == null) {
                           return;
                         }
-                        _selectedAmountType = value;
+                        setState(() {
+                          _selectedAmountType = value;
+                        });
                       },
                       items: AmountType.values
                           .map(
@@ -234,7 +272,7 @@ class _NewExpense extends State<NewExpense> {
                     const Spacer(),
                     Expanded(
                       child: IconButton(
-                        onPressed: widget.closeNewExpenseWidget,
+                        onPressed: _submitNewExpense,
                         icon: const Icon(
                           Icons.check,
                           color: Color.fromARGB(255, 178, 178, 178),
@@ -253,7 +291,19 @@ class _NewExpense extends State<NewExpense> {
                       ),
                     ),
                   ],
-                )
+                ),
+                Visibility(
+                  visible: showErrorWidget,
+                  child: const Text(
+                    '// some values may not be valid.',
+                    style: TextStyle(
+                      fontFamily: 'JetBrainsMono',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
               ],
             )
           ],

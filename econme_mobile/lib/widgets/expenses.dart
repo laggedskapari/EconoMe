@@ -23,46 +23,18 @@ class _Expenses extends State<Expenses> {
   void closeNewExpense(){
     setState(() {
       showNewExpenseWidget = false;
+
     });
   }
 
-  final List<Expense> _registeredExpenses = [
-    Expense(
-      type: AmountType.debit,
-      category: Category.education,
-      title: 'Flutter Development Course',
-      amount: 20.99,
-      date: DateTime.now(),
-    ),
-    Expense(
-      type: AmountType.credit,
-      category: Category.work,
-      title: 'Salary',
-      amount: 1200,
-      date: DateTime.now(),
-    ),
-    Expense(
-      type: AmountType.debit,
-      category: Category.personal,
-      title: 'Maldives Trip',
-      amount: 199.99,
-      date: DateTime.now(),
-    ),
-    Expense(
-      type: AmountType.debit,
-      category: Category.entertainment,
-      title: 'Oppenheimer',
-      amount: 20.99,
-      date: DateTime.now(),
-    ),
-    Expense(
-      type: AmountType.debit,
-      category: Category.food,
-      title: 'Wasabi',
-      amount: 5.99,
-      date: DateTime.now(),
-    ),
-  ];
+  void addNewExpense(Expense expense) {
+    setState(() {
+      _registeredExpenses.add(expense);
+      showNewExpenseWidget = false;
+    });
+  }
+
+  final List<Expense> _registeredExpenses = [];
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +60,7 @@ class _Expenses extends State<Expenses> {
               ),
             ),
             NewExpense(
+              onAddExpense: addNewExpense,
               showNewExpenseWidget: showNewExpenseWidget,
               closeNewExpenseWidget: closeNewExpense,
             ),
