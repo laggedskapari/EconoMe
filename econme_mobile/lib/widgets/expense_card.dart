@@ -28,6 +28,7 @@ class ExpenseCard extends StatelessWidget {
                 width: 10,
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     expense.formattedDate,
