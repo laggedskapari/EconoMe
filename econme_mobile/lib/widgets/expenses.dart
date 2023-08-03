@@ -20,6 +20,12 @@ class _Expenses extends State<Expenses> {
     });
   }
 
+  void closeNewExpense(){
+    setState(() {
+      showNewExpenseWidget = false;
+    });
+  }
+
   final List<Expense> _registeredExpenses = [
     Expense(
       type: AmountType.debit,
@@ -83,6 +89,7 @@ class _Expenses extends State<Expenses> {
             ),
             NewExpense(
               showNewExpenseWidget: showNewExpenseWidget,
+              closeNewExpenseWidget: closeNewExpense,
             ),
             FooterUtilityBelt(
               createNewExpense: createNewExpense,
