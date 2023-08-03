@@ -12,25 +12,31 @@ class Expenses extends StatefulWidget {
 }
 
 class _Expenses extends State<Expenses> {
-  bool showNewExpenseWidget = false;
+  bool _showNewExpenseWidget = false;
 
-  void createNewExpense() {
+  void _createNewExpense() {
     setState(() {
-      showNewExpenseWidget = true;
+      _showNewExpenseWidget = true;
     });
   }
 
-  void closeNewExpense(){
+  void _closeNewExpense(){
     setState(() {
-      showNewExpenseWidget = false;
+      _showNewExpenseWidget = false;
 
     });
   }
 
-  void addNewExpense(Expense expense) {
+  void _addNewExpense(Expense expense) {
     setState(() {
       _registeredExpenses.add(expense);
-      showNewExpenseWidget = false;
+      _showNewExpenseWidget = false;
+    });
+  }
+
+  void _removeExpense(Expense expense) {
+    setState(() {
+      _registeredExpenses.remove(expense);
     });
   }
 
@@ -57,15 +63,16 @@ class _Expenses extends State<Expenses> {
             Expanded(
               child: ExpensesList(
                 expenses: _registeredExpenses,
+                onRemoveExpense: _removeExpense,
               ),
             ),
             NewExpense(
-              onAddExpense: addNewExpense,
-              showNewExpenseWidget: showNewExpenseWidget,
-              closeNewExpenseWidget: closeNewExpense,
+              onAddExpense: _addNewExpense,
+              showNewExpenseWidget: _showNewExpenseWidget,
+              closeNewExpenseWidget: _closeNewExpense,
             ),
             FooterUtilityBelt(
-              createNewExpense: createNewExpense,
+              createNewExpense: _createNewExpense,
             ),
             const SizedBox(
               height: 30,
