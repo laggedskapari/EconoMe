@@ -60,7 +60,9 @@ class _Expenses extends State<Expenses> {
     );
   }
 
-  final List<Expense> _registeredExpenses = [];
+  final List<Expense> _registeredExpenses = [
+    Expense(type: AmountType.credit, category: Category.work, title: 'Salary', amount: 10000, date: DateTime.now())
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +111,7 @@ class _Expenses extends State<Expenses> {
             ),
             FooterUtilityBelt(
               createNewExpense: _createNewExpense,
+              expensesList: _registeredExpenses,
             ),
             const SizedBox(
               height: 30,

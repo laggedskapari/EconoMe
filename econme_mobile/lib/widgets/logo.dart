@@ -33,7 +33,14 @@ class Logo extends StatelessWidget {
           const SizedBox(
             height: 30,
           ),
-          IconButton.outlined(onPressed: initiateApp, icon: const Icon(Icons.start))
+          IconButton.outlined(
+            onPressed: initiateApp,
+            icon: const Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 15,
+              color: Color.fromARGB(255, 178, 178, 178),
+            ),
+          ),
         ],
       ),
     );
